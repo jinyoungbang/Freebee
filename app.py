@@ -56,30 +56,30 @@ def detect_labels(bucket, key, max_labels=10, min_confidence=90, region="us-east
 def home():
     return render_template('index.html')
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/process', methods=['POST', 'GET'])
 def hello_world():
-    return render_template('begin.html')
+    return render_template('process.html')
 
-@app.route('/view', methods=['POST', 'GET'])
-def view():
-    collection = db['info']
-    locations = []
-    info = []
-    for x in collection.find():
-        locations.append(x['location'])
-        info.append(x['info'])
+# @app.route('/view', methods=['POST', 'GET'])
+# def view():
+#     collection = db['info']
+#     locations = []
+#     info = []
+#     for x in collection.find():
+#         locations.append(x['location'])
+#         info.append(x['info'])
 
     
-    for i in locations:
-        print(i)
-        i[0] = float(i[0])
-        i[1] = float(i[1])
+#     for i in locations:
+#         print(i)
+#         i[0] = float(i[0])
+#         i[1] = float(i[1])
     
-    print(locations)
-    return render_template('view.html', locations=locations)
+#     print(locations)
+#     return render_template('view.html', locations=locations)
 
 @app.route('/result', methods=['POST', 'GET'])
-def upload_and_process():
+def result():
 
     user_lng = request.form['lng']
     user_lat = request.form['lat']
@@ -108,7 +108,23 @@ def upload_and_process():
         "location": [user_lng, user_lat]
     }
     x = collection.insert_one(post).inserted_id
-    return render_template('result.html')
+
+    collection = db['info']
+    locations = []
+    info = []
+    for x in collection.find():
+        locations.append(x['location'])
+        info.append(x['info'])
+
+    
+    for i in locations:
+        print(i)
+        i[0] = float(i[0])
+        i[1] = float(i[1])
+    
+    print(locations)
+
+    return render_template('result.html', locations=locations)
 
 @app.route('/buckets')
 def list_buckets():
