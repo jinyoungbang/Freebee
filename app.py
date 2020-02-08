@@ -17,7 +17,7 @@ s3client = boto3.client('s3')
 db = mongoclient['data']
 
 s3 = boto3.resource('s3')
-image_folder = os.getcwd()
+image_folder = os.getcwd() + "/s3"
 
 # Generates a random string with alphanumeral 10 digit
 def randomStringDigits(stringLength=10):
@@ -27,7 +27,7 @@ def randomStringDigits(stringLength=10):
 
 # Uploads image to s3 bucket
 def upload_image(key):
-    s3.meta.client.upload_file(image_folder + '/image/2.png', 'freebee-beanpot', key)
+    s3.meta.client.upload_file(image_folder + '/' + key, 'freebee-beanpot', key)
     return "Upload success"
 
 # Passes image to AWS Rekognition and returns objects within the image
@@ -51,6 +51,10 @@ def detect_labels(bucket, key, max_labels=10, min_confidence=90, region="us-east
         else:
             continue
     return list_of_items
+
+@app.route('/home', methods=['POST', 'GET'])
+def home():
+    return render_template('index.html')
 
 @app.route('/', methods=['POST', 'GET'])
 def hello_world():
@@ -80,11 +84,15 @@ def upload_and_process():
     user_lng = request.form['lng']
     user_lat = request.form['lat']
 
-    print(user_lng)
-    print(user_lat)
-
+    app.config["IMAGE_UPLOADS"] = os.getcwd() + "/s3"
 
     key = randomStringDigits()
+    if request.method == "POST":
+        if request.files:
+            image = request.files["image"]
+            image.save(os.path.join(app.config["IMAGE_UPLOADS"], key))
+            print("Image saved")
+
     bucket = 'freebee-beanpot'
     # uploads image with random key genereated
     upload_image(key)
@@ -100,7 +108,6 @@ def upload_and_process():
         "location": [user_lng, user_lat]
     }
     x = collection.insert_one(post).inserted_id
-    print(x)
     return render_template('result.html')
 
 @app.route('/buckets')
@@ -108,6 +115,19 @@ def list_buckets():
     response = s3client.list_buckets()
     print(response)
     return 'it works!'
+
+@app.route("/upload-image", methods=["GET", "POST"])
+def upload_image_s3():
+    app.config["IMAGE_UPLOADS"] = os.getcwd() + "/s3"
+
+    key = randomStringDigits()
+    if request.method == "POST":
+        if request.files:
+            image = request.files["image"]
+            image.save(os.path.join(app.config["IMAGE_UPLOADS"],key))
+            print("Image saved")
+            return redirect(request.url)
+    return render_template("upload_image.html")
 
 if __name__ == '__main__':
    app.run(debug=True)
