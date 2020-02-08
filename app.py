@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, request, jsonify, render_template, url_for, redirect
+import requests
 import os
 import boto3
 import json
@@ -14,10 +15,6 @@ app = Flask(__name__)
 mongoclient = pymongo.MongoClient(config.MONGO_CLIENT_URL, ssl=True, ssl_cert_reqs=ssl.CERT_NONE)
 s3client = boto3.client('s3')
 db = mongoclient['data']
-
-@app.route('/')
-def hello_world():
-    return 'Hello, World!'
 
 s3 = boto3.resource('s3')
 image_folder = os.getcwd()
@@ -55,9 +52,38 @@ def detect_labels(bucket, key, max_labels=10, min_confidence=90, region="us-east
             continue
     return list_of_items
 
+@app.route('/', methods=['POST', 'GET'])
+def hello_world():
+    return render_template('begin.html')
 
-@app.route('/process')
+@app.route('/view', methods=['POST', 'GET'])
+def view():
+    collection = db['info']
+    locations = []
+    info = []
+    for x in collection.find():
+        locations.append(x['location'])
+        info.append(x['info'])
+
+    
+    for i in locations:
+        print(i)
+        i[0] = float(i[0])
+        i[1] = float(i[1])
+    
+    print(locations)
+    return render_template('view.html', locations=locations)
+
+@app.route('/result', methods=['POST', 'GET'])
 def upload_and_process():
+
+    user_lng = request.form['lng']
+    user_lat = request.form['lat']
+
+    print(user_lng)
+    print(user_lat)
+
+
     key = randomStringDigits()
     bucket = 'freebee-beanpot'
     # uploads image with random key genereated
@@ -71,11 +97,11 @@ def upload_and_process():
     post = {
         "info": result,
 		"date": datetime.datetime.utcnow(),
-        "location": 0
+        "location": [user_lng, user_lat]
     }
     x = collection.insert_one(post).inserted_id
     print(x)
-    return "done!"
+    return render_template('result.html')
 
 @app.route('/buckets')
 def list_buckets():
@@ -84,4 +110,4 @@ def list_buckets():
     return 'it works!'
 
 if __name__ == '__main__':
-   app.run()
+   app.run(debug=True)
