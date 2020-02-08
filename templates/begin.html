@@ -56,9 +56,17 @@
 
             <h2 class="text-white mb-5">Input your longitude and latitude</h2>
 
-            <form method="post" action="/result" class="form-inline d-flex">
+            <form method="POST" action="/result" class="form-inline d-flex" enctype="multipart/form-data">
                 <input  name="lng" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="lng" placeholder="Longitude">
                 <input  name="lat" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="lat" placeholder="Latitude">
+                <div class="form-group">
+                  <label>Select image</label>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="image" id="image">
+                    <label class="custom-file-label" for="image">Select image...</label>
+                  </div>
+                </div>
+        
                 <button type="submit" class="btn btn-primary mx-auto">Enter</button>
             </form>
 
