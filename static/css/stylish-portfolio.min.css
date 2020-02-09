@@ -7,7 +7,7 @@
  
  body{
      /*font-family: 'Montserrat', sans-serif;*/
-     font-family: 'Indie Flower', cursive;
+     font-family: 'Ubuntu Condensed', sans-serif;
     font-size: 50px;}
  
  .btn-xl{padding:1.25rem 2.5rem}
@@ -20,23 +20,33 @@
  h1 {
     font-weight:bold;
     color: white;
-    text-shadow: 
-    -1.25px -1.25px 0 black,
-    1.25px -1.25px 0 black,
-    -1.25px 1.25px 0 black,
+    text-shadow: /*
+    -1.25px -1.25px 0 black
+    1.25px -1.25px 0 black
+    -1.25px 1.25px 0 black
     1.25px 1.25px 0 black
+   */
+   -1.50px -1.5px 0 black,
+   1.50px 1.5px 0 black,
+      -2px 2px 12px  black;  
+ }
 
- } 
- 
+
  h3 { 
-    font-weight:700;
+     font-size: 50px;
+    font-weight:bold;
     color: white;
     text-shadow: 
-    -1.25px -1.25px 0 black,
+    /*-1.25px -1.25px 0 black,
     1.25px -1.25px 0 black,
     -1.25px 1.25px 0 black,
     1.25px 1.25px 0 black
- }
+*/
+-1.50px -1.5px 0 black,
+1.50px 1.5px 0 black,
+   -2px 2px 12px  black;  
+
+}
 
  h2,h4,h5,h6{font-weight:700}
  .text-faded{color:rgba(255,255,255,.7)}
@@ -47,13 +57,27 @@
  .map iframe{pointer-events:none}
  .scroll-to-top{position:fixed;right:15px;bottom:15px;display:none;width:50px;height:50px;text-align:center;color:#fff;background: white (52,58,64,.5);line-height:45px}
  .scroll-to-top:focus,.scroll-to-top:hover{color:#fff}.scroll-to-top:hover{background:#343a40}.scroll-to-top i{font-weight:800}
- .masthead{min-height:30rem;position:relative;display:table;width:100%;height:auto;padding-top:8rem;padding-bottom:8rem;background:linear-gradient(90deg,rgba(255,255,255,.1) 0,rgba(255,255,255,.1) 100%),url(../img/bg-masthead.jpg);background-position:center center;background-repeat:no-repeat;background-size:cover}
+ .masthead{
+     min-height:30rem;
+     position:relative;
+     display:table;
+     opacity: 2;
+     width:100%;height:auto;padding-top:8rem;padding-bottom:8rem;background:linear-gradient(90deg,rgba(255,255,255,.1) 0,rgba(255,255,255,.1) 100%),url(../img/bg-masthead.jpg);background-position:center center;background-repeat:no-repeat;background-size:cover}
  .masthead h1{
-     font-size:100px;margin:0;
+     font-size:150px;
+     margin:0;
      padding:0; 
-     outline: 5px white; }
-@media (min-width:992px){
+     outline: 5px white; 
+     text-shadow: 
+    -1.25px -1.25px 0 black,
+    1.25px -1.25px 0 black,
+    -1.25px 1.25px 0 black,
+    1.25px 1.25px 0 black,
+    }
+
+     @media (min-width:992px){
 .masthead{height:100vh}
+
  
  #sidebar-wrapper{position:fixed;z-index:2;right:0;width:250px;height:100%;transition:all .4s ease 0s;transform:translateX(250px);background:#1d809f;border-left:1px solid rgba(255,255,255,.1)}
  
@@ -91,8 +115,20 @@
     line-height: 1.5;
     border-radius: 0.25rem;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    opacity: 1
+    opacity: 1;
+    transition: all 0.75s ease;
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	-o-transition: all 0.5 ease;
  }
+ .button1:hover{
+    color: rgb(153, 153, 153);
+   background-color: #506fa5;
+   text-decoration: none;
+   
+ }
+ 
  .bg-primary{background-color:#1d809f!important}
  .text-primary{color:#1d809f!important}.text-secondary{color:#ecb807!important}
 
