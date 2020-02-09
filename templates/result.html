@@ -21,6 +21,10 @@
     <!-- Custom styles for this template -->
     <link href="../static/css/grayscale.min.css" rel="stylesheet">
 
+    <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUkk-EE8uvioyrkJkbcbkCxLt5StfTJ-Y&libraries=visualization">
+  </script>
+
   </head>
 
  
@@ -86,6 +90,7 @@
         lat: 42.3505, 
         lng: -71.1054
       };
+
       
       var markersOnMap = [];
       var markerFeature = [];
@@ -99,9 +104,23 @@
         markerFeature.push(x)
       }
 
+      var locationHeatMapData = {}
+      var locationCoordinates = {}
+
+      for (var i = 0; i < locations.length; i++) {
+        if (locations[i][0] in locationHeatMapData) {
+          locationHeatMapData[locations[i][0]] += 1;
+        }
+        else {
+          locationHeatMapData[locations[i][0]] = 1;
+          locationCoordinates[locations[i][0]] = [locations[i][1], locations[i][2]];
+        }
+      }
+
       window.onload = function () {
         initMap();
       };
+
 
       function processMarkers() {
         for (var i = 0; i < locations.length; i++) {
@@ -149,19 +168,41 @@
           }
       }
 
+      function processHeatMap() {
+        var heatMapList = []
+        for (var i in locationHeatMapData) {
+          heatMapList.push({
+            location: new google.maps.LatLng(locationCoordinates[i][0], locationCoordinates[i][1]),
+            weight: locationHeatMapData[i] * 50
+          })
+        }
+
+        return heatMapList
+
+      }
+
       function initMap() {
-          map = new google.maps.Map(document.getElementById('map'), {
-              zoom: 13,
-              center: centerCords
-          });
-          processMarkers();
-          addMarker();
+        var heatMapData = processHeatMap();
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: centerCords
+        });
+
+        var heatmap = new google.maps.visualization.HeatmapLayer({
+          data: heatMapData,
+          radius: 35,
+        });
+        heatmap.setMap(map);
+        processMarkers();
+        addMarker();
       }
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUkk-EE8uvioyrkJkbcbkCxLt5StfTJ-Y
     &callback=initMap"
     async defer></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUkk-EE8uvioyrkJkbcbkCxLt5StfTJ-Y&libraries=visualization&callback=initMap">
+    </script>
     </script>
 
   </body>
