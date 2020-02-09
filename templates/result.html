@@ -77,27 +77,86 @@
     <!-- Custom scripts for this template -->
 
     <script type="text/javascript">
-      function initMap() {
-        var myLatLng = {lat: 42.3505, lng: -71.1054};
-
-        var map = new google.maps.Map(document.getElementById('map'), {
-          zoom: 13,
-          center: myLatLng
-        });
-        setMarkers(map);
-      }
-      
       var locations = {{ locations | safe}};
+      var info = {{ info | safe }};
 
-      function setMarkers(map) {
-  
-      for (var i = 0; i < locations.length; i++) {
-        var marker = new google.maps.Marker({
-          position: {lat: locations[i][1], lng: locations[i][2]},
-          map: map
-        });
+      var map;
+      var InforObj = [];
+      var centerCords = {
+        lat: 42.3505, 
+        lng: -71.1054
+      };
+      
+      var markersOnMap = [];
+      var markerFeature = [];
+
+      for (var i = 0; i < info.length; i++) {
+        var feature = info[i]
+        var x = []
+        for (var obj in feature) {
+          x.push(obj)
+        }
+        markerFeature.push(x)
       }
-    }
+
+      window.onload = function () {
+        initMap();
+      };
+
+      function processMarkers() {
+        for (var i = 0; i < locations.length; i++) {
+          markersOnMap.push({
+            placeName: locations[i][0],
+            LatLng: [{
+                lat: locations[i][1],
+                lng: locations[i][2]
+              }]
+          })
+        }
+      }
+        
+      function addMarker() {
+        for (var i = 0; i < markersOnMap.length; i++) {
+          var contentString = '<div id="content"><h4>' + markersOnMap[i].placeName +
+              '</h4><p>Items include: ' + markerFeature[i].toString() + '</p></div>';
+
+          const marker = new google.maps.Marker({
+              position: markersOnMap[i].LatLng[0],
+              map: map
+          });
+
+          const infowindow = new google.maps.InfoWindow({
+              content: contentString,
+              maxWidth: 300
+          });
+
+          marker.addListener('click', function () {
+              closeOtherInfo();
+              infowindow.open(marker.get('map'), marker);
+              InforObj[0] = infowindow;
+          });
+        }
+      }
+          
+      function closeOtherInfo() {
+          if (InforObj.length > 0) {
+              /* detach the info-window from the marker ... undocumented in the API docs */
+              InforObj[0].set("marker", null);
+              /* and close it */
+              InforObj[0].close();
+              /* blank the array */
+              InforObj.length = 0;
+          }
+      }
+
+      function initMap() {
+          map = new google.maps.Map(document.getElementById('map'), {
+              zoom: 13,
+              center: centerCords
+          });
+          processMarkers();
+          addMarker();
+      }
 
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUkk-EE8uvioyrkJkbcbkCxLt5StfTJ-Y
