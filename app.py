@@ -64,27 +64,6 @@ def home():
 def hello_world():
     return render_template('begin.html')
 
-<<<<<<< HEAD
-@app.route('/view', methods=['POST', 'GET'])
-def view():
-    collection = db['info']
-    locations = []
-    info = []
-    for x in collection.find():
-        locations.append(x['location'])
-        info.append(x['info'])
-
-    
-    for i in locations:
-        print(i)
-        i[0] = float(i[0])
-        i[1] = float(i[1])
-    
-    print(locations)
-    return render_template('view.html', locations=locations)
-
-=======
->>>>>>> backend
 @app.route('/result', methods=['POST', 'GET'])
 def upload_and_process():
 
@@ -131,9 +110,6 @@ def upload_and_process():
         "location": [user_lat, user_lng]
     }
     x = collection.insert_one(post).inserted_id
-<<<<<<< HEAD
-    return render_template('result.html')
-=======
 
     collection = db['info']
     names = []
@@ -152,7 +128,6 @@ def upload_and_process():
     print(locations)
 
     return render_template('result.html', locations=locations)
->>>>>>> backend
 
 @app.route('/buckets')
 def list_buckets():
