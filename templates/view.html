@@ -1,46 +1,206 @@
 <!DOCTYPE html>
-<html> 
-<head> 
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
-  <title>Google Maps Multiple Markers</title> 
-  <script src="http://maps.google.com/maps/api/js?sensor=false" 
-          type="text/javascript"></script>
-</head> 
-<body>
-  <div id="map" style="width: 500px; height: 400px;"></div>
+<html lang="en">
 
-  <script type="text/javascript">
-    var locations = {{locations}};
+  <head>
 
-    for (var i = 0; i < locations.length; i++) {
-        locations[i].unshift("hi")
-    }
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    console.log(locations);
 
-    var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 10,
-      center: new google.maps.LatLng(42.3601, -71.0589),
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    });
+  <title>FreeBee</title>
+  <link rel="shortcut icon" type="image/png" href="https://images-na.ssl-images-amazon.com/images/I/61KaItCzYyL._AC_SL1491_.jpg"/>
 
-    var infowindow = new google.maps.InfoWindow();
 
-    var marker, i;
+  <!-- Bootstrap Core CSS -->
+  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    for (i = 0; i < locations.length; i++) {  
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-        map: map
-      });
+  <!-- Custom Fonts -->
+  <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="../static/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy|Oswald&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Fjalla+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed&display=swap" rel="stylesheet">
 
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          infowindow.setContent(locations[i][0]);
-          infowindow.open(map, marker);
-        }
-      })(marker, i));
-    }
+  <!-- Custom CSS -->
+  <link href="../static/css/stylish-portfolio.min.css" rel="stylesheet">
+
+    <script type="text/javascript"
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUkk-EE8uvioyrkJkbcbkCxLt5StfTJ-Y&libraries=visualization">
   </script>
-</body>
+
+  </head>
+
+ 
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+
+    <header class="masthead d-flex">
+      <div class="topleft">
+        <a href="{{ url_for('home') }}"><img src="../static/img/bee.png" width="80" height="80"></a>
+      </div>
+      <div class="container text-center my-auto">
+        <h1 class="mb-1">Freebee</h1>
+        <h3 class="mb-2">
+          An easy way to get rid of things you dont want!
+        </h3>
+  
+        <section class="contact-section">
+          <div class="container d-flex justify-content-center">
+              <div id="map" style="width: 90%; height: 500px;"></div>
+          </div>
+    
+    
+        </section>
+      </div>
+        
+    </header>
+    
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+
+    <script type="text/javascript">
+      var locations = {{ locations | safe}};
+      var info = {{ info | safe }};
+
+      var map;
+      var InforObj = [];
+      var centerCords = {
+        lat: 42.3505, 
+        lng: -71.1054
+      };
+
+      
+      var markersOnMap = [];
+      var markerFeature = [];
+
+      for (var i = 0; i < info.length; i++) {
+        var feature = info[i]
+        var x = []
+        for (var obj in feature) {
+          x.push(obj)
+        }
+        markerFeature.push(x)
+      }
+
+      var locationHeatMapData = {}
+      var locationCoordinates = {}
+
+      for (var i = 0; i < locations.length; i++) {
+        if (locations[i][0] in locationHeatMapData) {
+          locationHeatMapData[locations[i][0]] += 1;
+        }
+        else {
+          locationHeatMapData[locations[i][0]] = 1;
+          locationCoordinates[locations[i][0]] = [locations[i][1], locations[i][2]];
+        }
+      }
+
+      window.onload = function () {
+        initMap();
+      };
+
+
+      function processMarkers() {
+        for (var i = 0; i < locations.length; i++) {
+          markersOnMap.push({
+            placeName: locations[i][0],
+            LatLng: [{
+                lat: locations[i][1],
+                lng: locations[i][2]
+              }]
+          })
+        }
+      }
+        
+      function addMarker() {
+        for (var i = 0; i < markersOnMap.length; i++) {
+          var contentString = '<div id="content"><h4>' + markersOnMap[i].placeName +
+              '</h4><p>Items include: ' + markerFeature[i].toString() + '</p></div>';
+
+          const marker = new google.maps.Marker({
+              position: markersOnMap[i].LatLng[0],
+              map: map
+          });
+
+          const infowindow = new google.maps.InfoWindow({
+              content: contentString,
+              maxWidth: 300
+          });
+
+          marker.addListener('click', function () {
+              closeOtherInfo();
+              infowindow.open(marker.get('map'), marker);
+              InforObj[0] = infowindow;
+          });
+        }
+      }
+          
+      function closeOtherInfo() {
+          if (InforObj.length > 0) {
+              /* detach the info-window from the marker ... undocumented in the API docs */
+              InforObj[0].set("marker", null);
+              /* and close it */
+              InforObj[0].close();
+              /* blank the array */
+              InforObj.length = 0;
+          }
+      }
+
+      function processHeatMap() {
+        var heatMapList = []
+        for (var i in locationHeatMapData) {
+          heatMapList.push({
+            location: new google.maps.LatLng(locationCoordinates[i][0], locationCoordinates[i][1]),
+            weight: locationHeatMapData[i] * 50
+          })
+        }
+
+        return heatMapList
+
+      }
+
+      function initMap() {
+        var heatMapData = processHeatMap();
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 13,
+          center: centerCords
+        });
+
+        var heatmap = new google.maps.visualization.HeatmapLayer({
+          data: heatMapData,
+          radius: 35,
+        });
+        heatmap.setMap(map);
+        processMarkers();
+        addMarker();
+      }
+
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUkk-EE8uvioyrkJkbcbkCxLt5StfTJ-Y
+    &callback=initMap"
+    async defer></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUkk-EE8uvioyrkJkbcbkCxLt5StfTJ-Y&libraries=visualization&callback=initMap">
+    </script>
+    </script>
+
+  </body>
+
 </html>

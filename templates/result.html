@@ -4,22 +4,33 @@
   <head>
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
 
-    <title>Down to Dine</title>
-    <link rel="shortcut icon" type="image/png" href="https://cdn0.iconfinder.com/data/icons/kameleon-free-pack-rounded/110/Food-Dome-512.png"/>
-    <!-- Bootstrap core CSS -->
-    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom fonts for this template -->
-    <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <title>FreeBeee</title>
+  <link rel="shortcut icon" type="image/png" href="https://images-na.ssl-images-amazon.com/images/I/61KaItCzYyL._AC_SL1491_.jpg"/>
 
-    <!-- Custom styles for this template -->
-    <link href="../static/css/grayscale.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Core CSS -->
+  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom Fonts -->
+  <link href="../static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+  <link href="../static/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy|Oswald&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Fjalla+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed&display=swap" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="../static/css/stylish-portfolio.min.css" rel="stylesheet">
 
     <script type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUkk-EE8uvioyrkJkbcbkCxLt5StfTJ-Y&libraries=visualization">
@@ -32,44 +43,28 @@
   <body id="page-top">
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="/" style="color:#ffffff">HOME</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          Menu
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="/test" style="color:#ffffff">Back to Planning</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#page-top" style="color:#ffffff">Recommendations</a>
-            </li>
-          </ul>
-        </div>
+
+    <header class="masthead d-flex">
+      <div class="topleft">
+        <a href="{{ url_for('home') }}"><img src="../static/img/bee.png" width="80" height="80"></a>
       </div>
-    </nav>
-
-    <!-- DISPLAY RESULTS -->
-    <section class="contact-section">
-      <div class="container d-flex justify-content-center">
-          <div id="map" style="width: 90%; height: 500px;"></div>
-      </div>
-
-
-    </section>
-
-
+      <div class="container text-center my-auto">
+        <h1 class="mb-1">Freebee</h1>
+        <h3 class="mb-2">
+          An easy way to get rid of things you dont want!
+        </h3>
+  
+        <section class="contact-section">
+          <div class="container d-flex justify-content-center">
+              <div id="map" style="width: 90%; height: 500px;"></div>
+          </div>
     
-
-    <!-- Footer -->
-    <footer class="bg-black small text-center text-white-50">
-      <div class="container">
-       
+    
+        </section>
       </div>
-    </footer>
+        
+    </header>
+    
 
     <!-- Bootstrap core JavaScript -->
     <script src="../static/vendor/jquery/jquery.min.js"></script>
@@ -83,6 +78,7 @@
     <script type="text/javascript">
       var locations = {{ locations | safe}};
       var info = {{ info | safe }};
+      var dates = {{ dates | safe}};
 
       var map;
       var InforObj = [];
@@ -137,7 +133,7 @@
       function addMarker() {
         for (var i = 0; i < markersOnMap.length; i++) {
           var contentString = '<div id="content"><h4>' + markersOnMap[i].placeName +
-              '</h4><p>Items include: ' + markerFeature[i].toString() + '</p></div>';
+              '</h4><p>Items include: ' + markerFeature[i].toString() + '</p> <p>Last updated: ' + dates[i] + ' (UTC) </p></div>';
 
           const marker = new google.maps.Marker({
               position: markersOnMap[i].LatLng[0],

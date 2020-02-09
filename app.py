@@ -120,18 +120,20 @@ def upload_and_process():
     names = []
     locations = []
     info = []
+    dates = []
+	
     for x in collection.find():
         data_mod = [x['name']] + x['location']
         locations.append(data_mod)
         info.append(x['info'])
+        dates.append(x['date'].strftime("%m/%d/%Y, %H:%M:%S"))
     
     for i in locations:
         i[1] = float(i[1])
         i[2] = float(i[2])
     
-    print(info)
-
-    return render_template('result.html', info=info, locations=locations)
+    print(dates)
+    return render_template('result.html', info=info, locations=locations, dates=dates)
 
 @app.route('/buckets')
 def list_buckets():
@@ -151,6 +153,28 @@ def upload_image_s3():
             print("Image saved")
             return redirect(request.url)
     return render_template("upload_image.html")
+
+@app.route("/view", methods=["GET", "POST"])
+def view_map():
+    collection = db['info']
+    names = []
+    locations = []
+    info = []
+    dates = []
+
+    for x in collection.find():
+        data_mod = [x['name']] + x['location']
+        locations.append(data_mod)
+        info.append(x['info'])
+        dates.append(x['date'])
+
+    
+    for i in locations:
+        i[1] = float(i[1])
+        i[2] = float(i[2])
+    
+
+    return render_template('view.html', info=info, locations=locations, dates=dates)
 
 # Route to delete all the documents in MongoDB
 @app.route("/data-delete", methods=["GET", "POST"])

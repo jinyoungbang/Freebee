@@ -9,7 +9,7 @@
  body{
      /*font-family: 'Montserrat', sans-serif;*/
      font-family: 'Ubuntu Condensed', sans-serif;
-    font-size: 50px;}
+    font-size: 20px;}
  
  .btn-xl{padding:1.25rem 2.5rem}
  
@@ -17,6 +17,13 @@
  
  .content-section-heading h2{font-size:3rem}
  .content-section-heading h3{font-size:1rem;text-transform:uppercase}
+
+ .topleft {
+    position: absolute;
+    top: 15px;
+    left: 26px;
+    font-size: 18px;
+  }
 
  h1 {
     font-weight:bold;
@@ -125,9 +132,13 @@
  }
  .button1:hover{
     color: rgb(153, 153, 153);
-   background-color: #506fa5;
-   text-decoration: none;
+    background-color: #506fa5;
+    text-decoration: none;
    
+ }
+
+ .process-title {
+     font-size: 100px !important
  }
  
  .bg-primary{background-color:#1d809f!important}
