@@ -3,6 +3,7 @@
  * Copyright 2013-2019 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-stylish-portfolio/blob/master/LICENSE)
  */
+
  body,html{width:100%;height:100%}
  
  body{
@@ -103,4 +104,5 @@
     left: 0;
     width: 100%;
     height: 100%;
+
 }
