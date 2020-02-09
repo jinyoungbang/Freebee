@@ -41,6 +41,7 @@ h6 {
   font-weight: 700;
 }
 
+
 .text-faded {
   color: rgba(255, 255, 255, 0.7);
 }
@@ -103,6 +104,7 @@ h6 {
   font-size: 4rem;
   margin: 0;
   padding: 0;
+  outline: 10px white
 }
 
 @media (min-width: 992px) {
