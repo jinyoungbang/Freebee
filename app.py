@@ -99,6 +99,7 @@ def upload_and_process():
             print("Image saved")
 
     bucket = 'freebee-beanpot'
+
     # uploads image with random key genereated
     upload_image(key)
 
@@ -125,13 +126,12 @@ def upload_and_process():
         info.append(x['info'])
     
     for i in locations:
-        print(i)
         i[1] = float(i[1])
         i[2] = float(i[2])
     
-    print(locations)
+    print(info)
 
-    return render_template('result.html', locations=locations)
+    return render_template('result.html', info=info, locations=locations)
 
 @app.route('/buckets')
 def list_buckets():
@@ -151,6 +151,15 @@ def upload_image_s3():
             print("Image saved")
             return redirect(request.url)
     return render_template("upload_image.html")
+
+# Route to delete all the documents in MongoDB
+@app.route("/data-delete", methods=["GET", "POST"])
+def data_delete():
+    collection = db['info']
+    x = collection.delete_many({})
+    print(x.deleted_count, " documents deleted.")
+    return "Deleted"
+
 
 if __name__ == '__main__':
    app.run(debug=True)
