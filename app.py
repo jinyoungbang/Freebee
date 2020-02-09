@@ -64,6 +64,10 @@ def home():
 def hello_world():
     return render_template('begin.html')
 
+@app.route('/process', methods=['POST', 'GET'])
+def process():
+    return render_template('process.html')
+
 @app.route('/result', methods=['POST', 'GET'])
 def upload_and_process():
 
