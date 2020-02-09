@@ -52,7 +52,11 @@ def detect_labels(bucket, key, max_labels=10, min_confidence=90, region="us-east
             continue
     return list_of_items
 
-@app.route('/home', methods=['POST', 'GET'])
+
+
+
+
+@app.route('/', methods=['POST', 'GET'])
 def home():
     return render_template('index.html')
 
@@ -60,29 +64,26 @@ def home():
 def hello_world():
     return render_template('process.html')
 
-# @app.route('/view', methods=['POST', 'GET'])
-# def view():
-#     collection = db['info']
-#     locations = []
-#     info = []
-#     for x in collection.find():
-#         locations.append(x['location'])
-#         info.append(x['info'])
-
-    
-#     for i in locations:
-#         print(i)
-#         i[0] = float(i[0])
-#         i[1] = float(i[1])
-    
-#     print(locations)
-#     return render_template('view.html', locations=locations)
-
 @app.route('/result', methods=['POST', 'GET'])
 def result():
 
-    user_lng = request.form['lng']
-    user_lat = request.form['lat']
+    user_addr = request.form['address']
+    user_addr = user_addr.replace(" ", "+")
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + user_addr + "&key=AIzaSyDUkk-EE8uvioyrkJkbcbkCxLt5StfTJ-Y"
+
+    payload = {}
+    headers = {}
+
+    response = requests.request("GET", url, headers=headers, data = payload)
+    response = response.json()
+
+    addr_name = response["results"][0]["formatted_address"]
+    user_lng = response["results"][0]["geometry"]["location"]["lng"]
+    user_lat = response["results"][0]["geometry"]["location"]["lat"]
+
+    print(addr_name)
+    print(user_lng)
+    print(user_lat)
 
     app.config["IMAGE_UPLOADS"] = os.getcwd() + "/s3"
 
@@ -105,22 +106,24 @@ def result():
     post = {
         "info": result,
 		"date": datetime.datetime.utcnow(),
-        "location": [user_lng, user_lat]
+        "name": addr_name,
+        "location": [user_lat, user_lng]
     }
     x = collection.insert_one(post).inserted_id
 
     collection = db['info']
+    names = []
     locations = []
     info = []
     for x in collection.find():
-        locations.append(x['location'])
+        data_mod = [x['name']] + x['location']
+        locations.append(data_mod)
         info.append(x['info'])
-
     
     for i in locations:
         print(i)
-        i[0] = float(i[0])
         i[1] = float(i[1])
+        i[2] = float(i[2])
     
     print(locations)
 
