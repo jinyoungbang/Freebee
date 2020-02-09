@@ -2392,6 +2392,7 @@ textarea.form-control {
   line-height: 1.5;
   border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  opacity: 1
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2421,8 +2422,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #739de6;
+  border-color:#739de6;
 }
 
 .btn-primary:hover {
