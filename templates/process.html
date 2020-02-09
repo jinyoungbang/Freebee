@@ -25,33 +25,6 @@
 
 <body id="page-top">
 
-  <!-- Navigation -->
-  <a class="menu-toggle rounded" href="#">
-    <i class="fas fa-bars"></i>
-  </a>
-  <nav id="sidebar-wrapper">
-    <ul class="sidebar-nav">
-      <li class="sidebar-brand">
-        <a class="js-scroll-trigger" href="#page-top">Start Bootstrap</a>
-      </li>
-      <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="#page-top">Home</a>
-      </li>
-      <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="#about">About</a>
-      </li>
-      <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="#services">Services</a>
-      </li>
-      <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="#portfolio">Portfolio</a>
-      </li>
-      <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="#contact">Contact</a>
-      </li>
-    </ul>
-  </nav>
-
   <!-- Header -->
   <header class="masthead d-flex">
     <div class="container text-center my-auto">
@@ -62,12 +35,11 @@
             <h1 class="text-white mb-5">Input your longitude and latitude</h1>
     
             <form method="POST" action="/result" class="form-inline d-flex" enctype="multipart/form-data">
-                <input  name="address" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="address" placeholder="Address">
+                <input name="address" class="form-control flex-fill mr-0 mr-sm-2 mb-3 mb-sm-0" id="address" placeholder="Address">
                 <div class="form-group">
-                  <label>Select image</label>
                   <div class="custom-file">
                     <input type="file" class="custom-file-input" name="image" id="image">
-                    <label class="custom-file-label" for="image">Select image...</label>
+                    <label class="custom-file-label" for="image">Select image</label>
                   </div>
                 </div>
         
@@ -80,35 +52,11 @@
     </section>
     </div>
     <div class="overlay"></div>
-
+=
 
   </header>
 
-  
 
-  <!-- Footer -->
-  <footer class="footer text-center">
-    <div class="container">
-      <ul class="list-inline mb-5">
-        <li class="list-inline-item">
-          <a class="social-link rounded-circle text-white mr-3" href="#">
-            <i class="icon-social-facebook"></i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a class="social-link rounded-circle text-white mr-3" href="#">
-            <i class="icon-social-twitter"></i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a class="social-link rounded-circle text-white" href="#">
-            <i class="icon-social-github"></i>
-          </a>
-        </li>
-      </ul>
-      <p class="text-muted small mb-0">Copyright &copy; Your Website 2019</p>
-    </div>
-  </footer>
 
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
